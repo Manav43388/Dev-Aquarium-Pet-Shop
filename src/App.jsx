@@ -1,302 +1,298 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Dog, 
   Fish, 
   ShoppingBag, 
   Heart, 
-  ArrowRight, 
-  MessageCircle, 
-  Menu, 
-  X,
-  PlusCircle,
-  Star,
-  CheckCircle2
+  Star, 
+  MapPin, 
+  Phone, 
+  MessageCircle,
+  Package,
+  ShieldCheck,
+  ChevronRight,
+  Filter
 } from 'lucide-react';
-import './App.css';
 
-// Asset imports
-import heroImg from './assets/hero.png';
+// Components
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import ProductCard from './components/ProductCard';
+import CartDrawer from './components/CartDrawer';
+import AdminPanel from './components/AdminPanel';
 
-const App = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+// Context
+import { CartProvider } from './context/CartContext';
+
+// Assets
+import aquariumImg from './assets/products/aquarium.png';
+import foodImg from './assets/products/food.png';
+
+const INITIAL_PRODUCTS = [
+  { id: 1, name: 'Rimless Premium Tank', price: 4500, category: 'Fish', rating: 5, reviews: 42, image: aquariumImg },
+  { id: 2, name: 'Goldfish Energy Pellets', price: 350, category: 'Fish Food', rating: 4, reviews: 128, image: foodImg },
+  { id: 3, name: 'LED Pro Color Light', price: 1200, category: 'Accessories', rating: 5, reviews: 56, image: aquariumImg },
+  { id: 4, name: 'Internal Power Filter', price: 850, category: 'Accessories', rating: 4, reviews: 89, image: aquariumImg },
+  { id: 5, name: 'Natural River Rocks (5kg)', price: 450, category: 'Accessories', rating: 5, reviews: 34, image: aquariumImg },
+  { id: 6, name: 'Betta Pro Nutrition', price: 250, category: 'Fish Food', rating: 5, reviews: 210, image: foodImg },
+];
+
+const REVIEWS = [
+  { id: 1, name: 'Sandeep Mahendrabhai Soni', text: 'Healthy pet food and a great variety of aquarium fish. The best shop in the area.', rating: 5 },
+  { id: 2, name: 'Shivam Mishra', text: 'Reasonable pricing and they have almost any pet accessory you might need.', rating: 5 },
+  { id: 3, name: 'Manoj Kumar', text: 'Very cool shop, stocks almost all types of pet items. Highly recommended.', rating: 5 },
+];
+
+const AppContent = () => {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [products, setProducts] = useState(INITIAL_PRODUCTS);
+  const [filter, setFilter] = useState('All');
+  const [activeReview, setActiveReview] = useState(0);
+
+  const filteredProducts = filter === 'All' 
+    ? products 
+    : products.filter(p => p.category === filter);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const interval = setInterval(() => {
+      setActiveReview((prev) => (prev + 1) % REVIEWS.length);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  const categories = [
-    {
-      id: 'dogs',
-      title: 'Dogs World',
-      description: 'Premium food, toys, and luxury accessories for your best friend.',
-      icon: <Dog size={32} />,
-      className: 'dog',
-      tags: ['Food', 'Products', 'Breeding']
-    },
-    {
-      id: 'fish',
-      title: 'Aqua Paradise',
-      description: 'Exotic fish food and high-tech aquarium maintenance supplies.',
-      icon: <Fish size={32} />,
-      className: 'fish',
-      tags: ['Food', 'Filters', 'Plants']
-    },
-    {
-      id: 'breeding',
-      title: 'Expert Breeding',
-      description: 'Professional dog breeding services with a focus on health and pedigree.',
-      icon: <PlusCircle size={32} />,
-      className: 'breeding',
-      tags: ['Inquiry', 'Health Care', 'Pedigree']
-    }
-  ];
-
-  const products = [
-    { id: 1, name: 'Royal Canine Adult', price: '$89.99', category: 'Dog Food', rating: 5 },
-    { id: 2, name: 'Premium Fish Flakes', price: '$24.50', category: 'Fish Food', rating: 4 },
-    { id: 3, name: 'LED Aquarium Light', price: '$120.00', category: 'Fish Product', rating: 5 },
-    { id: 4, name: 'Luxury Orthopedic Bed', price: '$145.00', category: 'Dog Product', rating: 5 },
-    { id: 5, name: 'Interactive Chew Toy', price: '$19.99', category: 'Dog Product', rating: 4 },
-    { id: 6, name: 'Advanced Water Filter', price: '$55.00', category: 'Fish Product', rating: 5 },
-  ];
-
   return (
-    <div className="app">
-      {/* Navigation */}
-      <nav className={`navbar ${scrolled ? 'scrolled glass' : ''}`}>
-        <div className="container">
-          <div className="logo">
-            <Heart size={28} fill="var(--primary)" />
-            <span>Dev Aquarium & Pet Shop</span>
-          </div>
-          
-          <div className="nav-links">
-            <a href="#home" className="nav-link active">Home</a>
-            <a href="#categories" className="nav-link">Shop</a>
-            <a href="#breeding" className="nav-link">Breeding</a>
-            <a href="#contact" className="nav-link">Contact</a>
-          </div>
-
-          <div className="btn-group">
-            <button className="btn btn-secondary glass">Login</button>
-            <button className="btn btn-primary">Join Now</button>
-          </div>
-        </div>
-      </nav>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Navbar onOpenCart={() => setIsCartOpen(true)} />
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       <main>
-        {/* Hero Section */}
-        <section id="home" className="hero">
-          <img src={heroImg} alt="Happy Dog and Vibrant Fish" className="hero-image" />
-          <div className="hero-overlay"></div>
-          <div className="container">
-            <motion.div 
-              className="hero-content"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1>Everything Your <span>Pet Deserves</span> & More</h1>
-              <p>From premium dog nutrition to exotic underwater worlds. We provide the best for your furry and finned companions.</p>
-              <div className="btn-group">
-                <button className="btn btn-primary">Explore Shop</button>
-                <button className="btn btn-secondary glass">Breeding Inquiries</button>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        <Hero />
 
-        {/* Categories Section */}
-        <section id="categories" className="section container">
-          <div className="section-header">
-            <h2>Our Specialized Categories</h2>
-            <p>Tailored products and services for every pet lover.</p>
+        {/* Categories */}
+        <section className="section container">
+          <div className="section-title">
+            <span className="badge badge-primary">Explore</span>
+            <h2>Top Categories</h2>
+            <p>Everything you need for your underwater friends and furry companions.</p>
           </div>
-          
-          <div className="category-grid">
-            {categories.map((cat, index) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+            {['Fish', 'Fish Food', 'Accessories', 'Pet Supplies'].map(cat => (
               <motion.div 
-                key={cat.id}
-                className={`category-card ${cat.className}`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-                viewport={{ once: true }}
+                key={cat} 
+                className="card" 
+                whileHover={{ scale: 1.05 }}
+                onClick={() => setFilter(cat)}
+                style={{ 
+                  cursor: 'pointer', 
+                  textAlign: 'center', 
+                  border: filter === cat ? '2px solid var(--primary)' : '1px solid transparent',
+                  background: filter === cat ? 'var(--primary-light)' : 'white'
+                }}
               >
-                <div className="icon">{cat.icon}</div>
-                <h3>{cat.title}</h3>
-                <p>{cat.description}</p>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {cat.tags.map(tag => (
-                    <span key={tag} style={{ fontSize: '0.8rem', padding: '4px 10px', background: 'rgba(255,255,255,0.2)', borderRadius: '20px' }}>
-                      {tag}
-                    </span>
-                  ))}
+                <div style={{ background: 'var(--primary-light)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--primary)' }}>
+                  {cat === 'Fish' ? <Fish /> : <Package />}
                 </div>
-                <button style={{ marginTop: 'auto', background: 'none', border: 'none', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  Explore <ArrowRight size={18} />
-                </button>
+                <h3 style={{ fontSize: '1.1rem' }}>{cat}</h3>
               </motion.div>
             ))}
           </div>
         </section>
 
         {/* Featured Products */}
-        <section className="section glass" style={{ background: 'var(--surface)' }}>
+        <section id="shop" className="section" style={{ background: 'var(--surface)' }}>
           <div className="container">
-            <div className="section-header">
-              <h2>Trending Products</h2>
-              <p>Top-rated items loved by pets and owners alike.</p>
+            <div className="section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', textAlign: 'left' }}>
+              <div>
+                <span className="badge badge-primary">Our Shop</span>
+                <h2>Featured Products</h2>
+              </div>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button className={`btn ${filter === 'All' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setFilter('All')}>All</button>
+                <button className={`btn ${filter === 'Fish' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setFilter('Fish')}>Fish</button>
+                <button className={`btn ${filter === 'Fish Food' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setFilter('Fish Food')}>Food</button>
+              </div>
             </div>
 
-            <div className="product-grid">
-              {products.map((product, index) => (
-                <motion.div 
-                  key={product.id} 
-                  className="product-card"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '32px' }}>
+              <AnimatePresence mode="popLayout">
+                {filteredProducts.map(product => (
+                  <motion.div
+                    key={product.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ProductCard product={product} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </div>
+        </section>
+
+        {/* Trust Section */}
+        <section className="section container">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px', alignItems: 'center' }}>
+            <div>
+              <span className="badge badge-primary">Why Choose Us</span>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, margin: '16px 0' }}>The Most Trusted <br /> Shop in Vadodara</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '40px' }}>
+                <div className="card">
+                  <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)' }}>4.1 <Star fill="var(--primary)" size={24} style={{ verticalAlign: 'middle' }} /></h3>
+                  <p>Google Rating</p>
+                </div>
+                <div className="card">
+                  <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)' }}>200+</h3>
+                  <p>Happy Customers</p>
+                </div>
+                <div className="card">
+                  <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)' }}>9+</h3>
+                  <p>Years Experience</p>
+                </div>
+                <div className="card">
+                  <ShieldCheck size={40} color="var(--primary)" />
+                  <p>Quality Verified</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="card glass" style={{ padding: '60px', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ fontSize: '4rem', opacity: 0.1, position: 'absolute', top: '20px', left: '20px' }}>"</div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeReview}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  <div className="product-image">
-                    {product.category.includes('Dog') ? <Dog size={48} color="var(--primary)" /> : <Fish size={48} color="var(--secondary)" />}
-                  </div>
-                  <div className="product-info">
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{product.category}</p>
-                    <h3>{product.name}</h3>
-                    <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
-                      {[...Array(product.rating)].map((_, i) => <Star key={i} size={14} fill="var(--primary)" color="var(--primary)" />)}
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="product-price">{product.price}</span>
-                      <button className="btn-primary" style={{ padding: '8px', borderRadius: '50%' }}>
-                        <ShoppingBag size={18} />
-                      </button>
-                    </div>
+                  <p style={{ fontSize: '1.4rem', fontStyle: 'italic', marginBottom: '32px' }}>{REVIEWS[activeReview].text}</p>
+                  <div>
+                    <h4 style={{ fontWeight: 800 }}>{REVIEWS[activeReview].name}</h4>
+                    <p style={{ color: 'var(--primary)' }}>Verified Customer</p>
                   </div>
                 </motion.div>
-              ))}
+              </AnimatePresence>
             </div>
           </div>
         </section>
 
-        {/* Breeding Trust Section */}
-        <section id="breeding" className="section container" style={{ textAlign: 'center' }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <motion.div
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               viewport={{ once: true }}
-            >
-              <h2 style={{ fontSize: '3rem', marginBottom: '24px' }}>Ethical Dog <span>Breeding</span></h2>
-              <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '40px' }}>
-                We take pride in our breeding program, ensuring healthy, happy, and genetically sound companions for your family.
+        {/* About Section */}
+        <section id="about" className="section" style={{ background: 'var(--primary-light)' }}>
+          <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '80px', alignItems: 'center' }}>
+            <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
+              <img src={aquariumImg} alt="Shop Inside" style={{ width: '100%', height: '500px', objectFit: 'cover' }} />
+            </div>
+            <div>
+              <span className="badge badge-primary" style={{ background: 'white' }}>Our Story</span>
+              <h2 style={{ fontSize: '2.5rem', margin: '16px 0' }}>Passion for Pets <br /> Since 2015</h2>
+              <p style={{ fontSize: '1.1rem', marginBottom: '24px' }}>
+                Dev Aquarium started with a simple goal: to bring the beauty of the underwater world to every home in Vadodara. 
+                Over the years, we have expanded to become a one-stop destination for all pet lovers.
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-                  <CheckCircle2 color="var(--accent)" /> <span>Health Certified</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-                  <CheckCircle2 color="var(--accent)" /> <span>Champion Bloodline</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-                  <CheckCircle2 color="var(--accent)" /> <span>Veterinary Checked</span>
-                </div>
-              </div>
-              <button className="btn btn-primary" style={{ padding: '16px 48px' }}>
-                View Available Puppies
-              </button>
-            </motion.div>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <li style={{ display: 'flex', gap: '12px' }}><ShieldCheck color="var(--primary)" /> Only healthy, quarantine-cleared fish</li>
+                <li style={{ display: 'flex', gap: '12px' }}><ShieldCheck color="var(--primary)" /> Top international pet food brands</li>
+                <li style={{ display: 'flex', gap: '12px' }}><ShieldCheck color="var(--primary)" /> Expert advice on aquarium maintenance</li>
+              </ul>
+            </div>
           </div>
         </section>
 
-        {/* Testimonials Section */}
+        {/* Admin Panel Preview */}
         <section className="section container">
-          <div className="section-header">
-            <h2>What Our Customers Say</h2>
-            <p>Real reviews from our community in Vadodara.</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-            <div className="glass" style={{ padding: '30px', borderRadius: 'var(--radius)' }}>
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
-                {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="var(--primary)" color="var(--primary)" />)}
-              </div>
-              <p style={{ fontStyle: 'italic', marginBottom: '16px' }}>"Healthy pet food and a great variety of aquarium fish. The best shop in the area."</p>
-              <p style={{ fontWeight: '600' }}>- Sandeep Mahendrabhai Soni</p>
-            </div>
-            <div className="glass" style={{ padding: '30px', borderRadius: 'var(--radius)' }}>
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
-                {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="var(--primary)" color="var(--primary)" />)}
-              </div>
-              <p style={{ fontStyle: 'italic', marginBottom: '16px' }}>"Reasonable pricing and they have almost any pet accessory you might need."</p>
-              <p style={{ fontWeight: '600' }}>- Shivam Mishra</p>
-            </div>
-            <div className="glass" style={{ padding: '30px', borderRadius: 'var(--radius)' }}>
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
-                {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="var(--primary)" color="var(--primary)" />)}
-              </div>
-              <p style={{ fontStyle: 'italic', marginBottom: '16px' }}>"Very cool shop, stocks almost all types of pet items. Highly recommended."</p>
-              <p style={{ fontWeight: '600' }}>- Manoj Kumar</p>
-            </div>
-          </div>
+          <AdminPanel 
+            products={products} 
+            onAdd={(p) => setProducts([p, ...products])}
+            onDelete={(id) => setProducts(products.filter(p => p.id !== id))}
+          />
         </section>
 
-        {/* WhatsApp CTA */}
-        <section id="contact" className="section" style={{ background: 'var(--background)' }}>
-          <div className="container glass" style={{ borderRadius: 'var(--radius-lg)', padding: '60px', textAlign: 'center' }}>
-            <div style={{ display: 'inline-block', padding: '8px 16px', background: 'var(--accent)', borderRadius: '20px', marginBottom: '24px', fontWeight: 'bold' }}>
-              <CheckCircle2 size={16} style={{ verticalAlign: 'middle', marginRight: '8px' }} />
-              Delivery Available in Vadodara
+        {/* Contact Section */}
+        <section id="contact" className="section container">
+          <div className="card glass" style={{ padding: '60px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px' }}>
+            <div>
+              <h2>Get in Touch</h2>
+              <p style={{ marginBottom: '40px' }}>Visit our store or contact us for home delivery services.</p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <div style={{ display: 'flex', gap: '16px' }}>
+                  <div style={{ background: 'var(--primary-light)', padding: '12px', borderRadius: '12px', color: 'var(--primary)' }}><MapPin /></div>
+                  <div>
+                    <h4>Location</h4>
+                    <p>FF-5, Susen - Tarsali Ring Rd, Tarsali, Vadodara, Gujarat 390009</p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '16px' }}>
+                  <div style={{ background: 'var(--primary-light)', padding: '12px', borderRadius: '12px', color: 'var(--primary)' }}><Phone /></div>
+                  <div>
+                    <h4>Phone</h4>
+                    <p>+91 99796 11397</p>
+                  </div>
+                </div>
+              </div>
+
+              <a href="https://wa.me/919979611397" className="btn btn-primary" style={{ marginTop: '40px', width: '100%', justifyContent: 'center', padding: '16px', background: '#25D366' }}>
+                <MessageCircle /> Order on WhatsApp
+              </a>
             </div>
-            <br />
-            <MessageCircle size={64} color="#25D366" style={{ marginBottom: '24px' }} />
-            <h2 style={{ marginBottom: '16px' }}>Have Questions? Chat with Us!</h2>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '8px' }}>
-              Visit us at: FF-5, Susen - Tarsali Ring Rd, Tarsali, Vadodara
-            </p>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>
-              Call us: +91 99796 11397
-            </p>
-            <a href="https://wa.me/919979611397" className="btn btn-primary" style={{ background: '#25D366', display: 'inline-flex', alignItems: 'center', gap: '12px' }}>
-              Contact on WhatsApp
-            </a>
+
+            <div style={{ height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m12!1m3!1d3692.657512141513!2d73.13477!3d22.25632!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fc390c4d068ee%3A0x43ee9fe52a9!2sDev%20Aquarium%20%26%20Pet%20Shop!5e0!3m2!1sen!2sin!4v1714376000000!5m2!1sen!2sin" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen="" 
+                loading="lazy"
+              ></iframe>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer style={{ padding: '60px 0', borderTop: '1px solid var(--glass-border)', background: 'var(--background)' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', textAlign: 'left', marginBottom: '40px' }}>
-            <div>
-              <div className="logo" style={{ marginBottom: '20px' }}>
-                <Heart size={24} fill="var(--primary)" />
-                <span>Dev Aquarium</span>
-              </div>
-              <p style={{ color: 'var(--text-muted)' }}>Premium pet shop in Vadodara specializing in healthy food and exotic fish.</p>
+      <footer style={{ padding: '80px 0', background: 'var(--text)', color: 'white' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '60px' }}>
+          <div>
+            <div className="logo" style={{ color: 'white', marginBottom: '24px' }}>
+              <Heart fill="var(--primary)" color="var(--primary)" />
+              <span>Dev Aquarium</span>
             </div>
-            <div>
-              <h4 style={{ marginBottom: '20px' }}>Location</h4>
-              <p style={{ color: 'var(--text-muted)' }}>FF-5, Susen - Tarsali Ring Rd,<br />near Market Sussen, Tarsali,<br />Vadodara, Gujarat 390009</p>
-            </div>
-            <div>
-              <h4 style={{ marginBottom: '20px' }}>Contact</h4>
-              <p style={{ color: 'var(--text-muted)' }}>Phone: +91 99796 11397<br />Email: info@devaquarium.com</p>
-            </div>
+            <p style={{ opacity: 0.7 }}>Premium aquarium and pet supplies in Vadodara. Serving healthy fish and quality products since 2015.</p>
           </div>
-          <p style={{ color: 'var(--text-muted)', borderTop: '1px solid var(--glass-border)', paddingTop: '40px' }}>
-            &copy; 2026 Dev Aquarium & Pet Shop. All rights reserved.
-          </p>
+          <div>
+            <h4 style={{ marginBottom: '24px' }}>Quick Links</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', opacity: 0.7 }}>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#shop">Shop</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ marginBottom: '24px' }}>Support</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', opacity: 0.7 }}>
+              <li>Shipping Policy</li>
+              <li>Returns & Refunds</li>
+              <li>Privacy Policy</li>
+              <li>Terms of Service</li>
+            </ul>
+          </div>
+        </div>
+        <div className="container" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '60px', paddingTop: '40px', textAlign: 'center', opacity: 0.5 }}>
+          <p>&copy; 2026 Dev Aquarium & Pet Shop. All rights reserved.</p>
         </div>
       </footer>
     </div>
   );
 };
+
+const App = () => (
+  <CartProvider>
+    <AppContent />
+  </CartProvider>
+);
 
 export default App;
