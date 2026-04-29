@@ -27,14 +27,18 @@ import { CartProvider } from './context/CartContext';
 // Assets
 import aquariumImg from './assets/products/aquarium.png';
 import foodImg from './assets/products/food.png';
+import bettaImg from './assets/products/betta.png';
+import birdsImg from './assets/products/birds.png';
 
 const INITIAL_PRODUCTS = [
-  { id: 1, name: 'Rimless Premium Tank', price: 4500, category: 'Fish', rating: 5, reviews: 42, image: aquariumImg },
+  { id: 1, name: 'Rimless Premium Tank', price: 4500, category: 'Accessories', rating: 5, reviews: 42, image: aquariumImg },
   { id: 2, name: 'Goldfish Energy Pellets', price: 350, category: 'Fish Food', rating: 4, reviews: 128, image: foodImg },
-  { id: 3, name: 'LED Pro Color Light', price: 1200, category: 'Accessories', rating: 5, reviews: 56, image: aquariumImg },
-  { id: 4, name: 'Internal Power Filter', price: 850, category: 'Accessories', rating: 4, reviews: 89, image: aquariumImg },
-  { id: 5, name: 'Natural River Rocks (5kg)', price: 450, category: 'Accessories', rating: 5, reviews: 34, image: aquariumImg },
-  { id: 6, name: 'Betta Pro Nutrition', price: 250, category: 'Fish Food', rating: 5, reviews: 210, image: foodImg },
+  { id: 3, name: 'Exotic Halfmoon Betta', price: 650, category: 'Fish', rating: 5, reviews: 210, image: bettaImg },
+  { id: 4, name: 'Pair of African Lovebirds', price: 2800, category: 'Birds', rating: 5, reviews: 34, image: birdsImg },
+  { id: 5, name: 'LED Pro Color Light', price: 1200, category: 'Accessories', rating: 5, reviews: 56, image: aquariumImg },
+  { id: 6, name: 'Internal Power Filter', price: 850, category: 'Accessories', rating: 4, reviews: 89, image: aquariumImg },
+  { id: 7, name: 'Colorful Fancy Budgies', price: 450, category: 'Birds', rating: 4, reviews: 76, image: birdsImg },
+  { id: 8, name: 'Premium Mix Bird Seed', price: 180, category: 'Pet Supplies', rating: 5, reviews: 145, image: foodImg },
 ];
 
 const REVIEWS = [
@@ -75,8 +79,8 @@ const AppContent = () => {
             <h2>Top Categories</h2>
             <p>Everything you need for your underwater friends and furry companions.</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
-            {['Fish', 'Fish Food', 'Accessories', 'Pet Supplies'].map(cat => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '24px' }}>
+            {['Fish', 'Birds', 'Fish Food', 'Accessories', 'Pet Supplies'].map(cat => (
               <motion.div 
                 key={cat} 
                 className="card" 
@@ -106,9 +110,10 @@ const AppContent = () => {
                 <span className="badge badge-primary">Our Shop</span>
                 <h2>Featured Products</h2>
               </div>
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 <button className={`btn ${filter === 'All' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setFilter('All')}>All</button>
                 <button className={`btn ${filter === 'Fish' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setFilter('Fish')}>Fish</button>
+                <button className={`btn ${filter === 'Birds' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setFilter('Birds')}>Birds</button>
                 <button className={`btn ${filter === 'Fish Food' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setFilter('Fish Food')}>Food</button>
               </div>
             </div>
