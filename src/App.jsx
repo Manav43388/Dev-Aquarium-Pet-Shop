@@ -49,7 +49,7 @@ const INITIAL_PRODUCTS = [
     category: 'Fish Food', 
     rating: 4, 
     reviews: 128, 
-    image: 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=800',
     description: 'Premium slow-sinking nutrient pellets enriched with natural color-enhancers (Spirulina & Astaxanthin), highly digestible and leaves water clean.',
     stockStatus: 'in',
     specs: {
@@ -101,7 +101,7 @@ const INITIAL_PRODUCTS = [
     category: 'Accessories', 
     rating: 5, 
     reviews: 56, 
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&q=80&w=800',
     description: 'Slim profile anodized aluminum LED light fixture with extendable brackets. Features programmable spectrum, 24/7 sunrise-sunset cycle, and custom timer.',
     stockStatus: 'in',
     specs: {
@@ -118,7 +118,7 @@ const INITIAL_PRODUCTS = [
     category: 'Accessories', 
     rating: 4, 
     reviews: 89, 
-    image: 'https://images.unsplash.com/photo-1520338258525-606b90f96b0c?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1524704654690-b56c05c78a02?auto=format&fit=crop&q=80&w=800',
     description: 'Heavy duty external canister filter with 3-stage mechanical, biological, and chemical filtration. Silent motor, high flow rate, and easy prime valve.',
     stockStatus: 'in',
     specs: {
@@ -135,7 +135,7 @@ const INITIAL_PRODUCTS = [
     category: 'Birds', 
     rating: 4, 
     reviews: 76, 
-    image: 'https://images.unsplash.com/photo-1522856283749-62f90a2900b6?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1552728089-57bdde30ebd3?auto=format&fit=crop&q=80&w=800',
     description: 'Playful, hand-raised budget budgerigars. Very friendly temperament, highly vocal, and easy to train. Standard yellow/blue pastel combinations.',
     stockStatus: 'in',
     specs: {
@@ -152,7 +152,7 @@ const INITIAL_PRODUCTS = [
     category: 'Pet Supplies', 
     rating: 5, 
     reviews: 145, 
-    image: 'https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?auto=format&fit=crop&q=80&w=800',
     description: 'Triple-cleaned seed mixture formulated for small psittacines. Packed with yellow millet, red millet, canary seed, and oat groats to keep birds vibrant.',
     stockStatus: 'in',
     specs: {
