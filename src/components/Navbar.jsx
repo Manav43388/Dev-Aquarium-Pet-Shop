@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { ShoppingCart, Menu, X, User, Heart } from 'lucide-react';
+import { ShoppingCart, User, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const Navbar = ({ onOpenCart }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { totalItems } = useCart();
 
   return (
