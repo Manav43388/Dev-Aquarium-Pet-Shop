@@ -168,6 +168,75 @@ const INITIAL_PRODUCTS = [
       expiry: '12 Months'
     }
   },
+  { 
+    id: 9, 
+    name: 'Red Cap Oranda Goldfish', 
+    price: 850, 
+    category: 'Fish', 
+    rating: 5, 
+    reviews: 64, 
+    image: bettaImg,
+    description: 'Beautiful premium quality fancy goldfish with prominent red caps. Highly active, friendly community fish, quarantined and feeding well.',
+    stockStatus: 'in',
+    specs: {
+      temp: '18°C - 23°C',
+      ph: '7.0 - 7.5',
+      temperament: 'Peaceful / Social',
+      minTank: '75L (20 Gallon)',
+      diet: 'Omnivore (Flakes & Pellets)'
+    }
+  },
+  { 
+    id: 10, 
+    name: 'Premium Spirulina Flakes', 
+    price: 480, 
+    category: 'Fish Food', 
+    rating: 5, 
+    reviews: 92, 
+    image: foodImg,
+    description: 'High-grade fish food flakes enriched with pure Spirulina algae to enhance fish colors, improve immunity, and support healthy development.',
+    stockStatus: 'in',
+    specs: {
+      weight: '100g',
+      form: 'Thin Dry Flakes',
+      protein: '45% Crude Protein',
+      expiry: '18 Months'
+    }
+  },
+  { 
+    id: 11, 
+    name: 'SunSun Canister Filter HW-603B', 
+    price: 2400, 
+    category: 'Accessories', 
+    rating: 4, 
+    reviews: 110, 
+    image: aquariumImg,
+    description: 'Compact external canister filter ideal for nano tanks. Features quiet motor, 3-stage sponge filtration, complete piping, and quick shutoff valves.',
+    stockStatus: 'in',
+    specs: {
+      dimensions: '16cm x 16cm x 29cm',
+      power: '6W (400 L/H flow)',
+      material: 'ABS Plastic',
+      warranty: '6 Months Warranty'
+    }
+  },
+  { 
+    id: 12, 
+    name: 'Yellow-Sided Green Cheek Conure', 
+    price: 8500, 
+    category: 'Birds', 
+    rating: 5, 
+    reviews: 18, 
+    image: birdsImg,
+    description: 'Beautiful hand-tamed Green Cheek Conure in yellow-sided color morph. Highly intelligent, playful, starting to mimic speech, and DNA sexed.',
+    stockStatus: 'in',
+    specs: {
+      lifespan: '15 - 20 Years',
+      nature: 'Playful, Affectionate & Curious',
+      cageSize: '24" x 24" x 30"',
+      diet: 'Premium Pellets, Fresh Fruits, and Vegetables'
+    }
+  },
 ];
 
 const REVIEWS = [
@@ -203,7 +272,7 @@ const AppContent = () => {
   // Details Modal State
   const [selectedDetailProduct, setSelectedDetailProduct] = useState(null);
 
-  const CATALOG_VERSION = 'v4_local_assets_fixed';
+  const CATALOG_VERSION = 'v5_more_products_and_preview';
 
   // Load from LocalStorage
   const [products, setProducts] = useState(() => {

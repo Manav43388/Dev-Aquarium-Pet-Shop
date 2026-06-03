@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, ChevronRight, ChevronLeft, Check } from 'lucide-react';
 
@@ -45,6 +45,19 @@ const CustomTankBuilder = () => {
   
   // Total cost estimate
   const totalPrice = glassCost + equipment.price + theme.price;
+
+  const bubbles = useMemo(() => {
+    return Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      left: `${10 + Math.random() * 80}%`,
+      delay: `${Math.random() * 3}s`,
+      duration: `${2 + Math.random() * 2}s`,
+      size: `${1.5 + Math.random() * 2.5}px`
+    }));
+  }, []);
+
+  const displayWidth = Math.max(220, Math.min(480, dimensions.l * 8));
+  const displayHeight = Math.max(120, Math.min(220, dimensions.h * 9));
 
   const handlePresetSelect = (preset) => {
     setDimensions({ l: preset.l, w: preset.w, h: preset.h, isCustom: false });
@@ -113,6 +126,285 @@ const CustomTankBuilder = () => {
             </span>
           </div>
         ))}
+      </div>
+
+      {/* Live Preview Panel */}
+      <div style={{ 
+        background: 'radial-gradient(circle at center, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.95) 100%)',
+        border: '1px solid var(--surface-border)',
+        borderRadius: '20px',
+        padding: '30px 20px',
+        marginBottom: '40px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        minHeight: '290px',
+        overflow: 'hidden',
+        boxShadow: 'inset 0 0 40px rgba(0,0,0,0.6)'
+      }}>
+        {/* Floating preview title tag */}
+        <div style={{
+          position: 'absolute',
+          top: '12px',
+          left: '20px',
+          fontSize: '0.75rem',
+          textTransform: 'uppercase',
+          letterSpacing: '1px',
+          color: 'var(--primary)',
+          fontWeight: 700,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px'
+        }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary)', animation: 'pulse 1.5s infinite' }} />
+          Live Tank Preview
+        </div>
+
+        {/* CSS Keyframes for bubbles and lights */}
+        <style>{`
+          @keyframes bubbleUp {
+            0% { transform: translateY(100%) scale(0.3); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-160px) scale(1); opacity: 0; }
+          }
+          @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+          }
+          .bubble-particle {
+            position: absolute;
+            background: rgba(255,255,255,0.45);
+            border-radius: 50%;
+            pointer-events: none;
+            bottom: 0;
+          }
+        `}</style>
+
+        {/* Equipment: Planted full spectrum light fixture bar (sits on top of the tank border) */}
+        {equipment.id === 'planted' && (
+          <div style={{
+            width: `${displayWidth + 10}px`,
+            height: '10px',
+            background: 'linear-gradient(to bottom, #4b5563, #1f2937)',
+            borderRadius: '4px 4px 0 0',
+            borderBottom: '2px solid rgba(255,255,255,0.1)',
+            zIndex: 10,
+            marginBottom: '-6px', // mount onto glass
+            position: 'relative',
+            boxShadow: '0 -2px 10px rgba(14,165,233,0.3)'
+          }}>
+            {/* Fixture leg left */}
+            <div style={{ position: 'absolute', left: 0, bottom: '-8px', width: '4px', height: '8px', background: '#374151' }} />
+            {/* Fixture leg right */}
+            <div style={{ position: 'absolute', right: 0, bottom: '-8px', width: '4px', height: '8px', background: '#374151' }} />
+          </div>
+        )}
+
+        {/* Equipment: Basic overhead light fixture */}
+        {equipment.id === 'basic' && (
+          <div style={{
+            width: `${displayWidth - 40}px`,
+            height: '6px',
+            background: '#1f2937',
+            borderRadius: '2px',
+            zIndex: 10,
+            marginBottom: '-6px',
+            position: 'relative'
+          }}>
+            {/* Hanging clips */}
+            <div style={{ position: 'absolute', left: '10px', bottom: '-8px', width: '2px', height: '8px', background: '#4b5563' }} />
+            <div style={{ position: 'absolute', right: '10px', bottom: '-8px', width: '2px', height: '8px', background: '#4b5563' }} />
+          </div>
+        )}
+
+        {/* Light Ray Overlay */}
+        {equipment.id === 'planted' && (
+          <div style={{
+            position: 'absolute',
+            top: '85px',
+            width: `${displayWidth}px`,
+            height: `${displayHeight}px`,
+            background: 'linear-gradient(to bottom, rgba(14,165,233,0.15) 0%, rgba(236,72,153,0.05) 50%, transparent 100%)',
+            clipPath: 'polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)',
+            pointerEvents: 'none',
+            zIndex: 3,
+            transition: 'all 0.5s ease'
+          }} />
+        )}
+        {equipment.id === 'basic' && (
+          <div style={{
+            position: 'absolute',
+            top: '85px',
+            width: `${displayWidth}px`,
+            height: `${displayHeight}px`,
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0.08) 0%, transparent 100%)',
+            clipPath: 'polygon(20% 0%, 80% 0%, 95% 100%, 5% 100%)',
+            pointerEvents: 'none',
+            zIndex: 3,
+            transition: 'all 0.5s ease'
+          }} />
+        )}
+
+        {/* Actual Glass Aquarium */}
+        <div style={{
+          width: `${displayWidth}px`,
+          height: `${displayHeight}px`,
+          position: 'relative',
+          borderRadius: '2px',
+          overflow: 'hidden',
+          transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+          // Glass Quality borders
+          border: glassType.id === 'ultra' ? '3px solid #38bdf8' : '3px solid #10b981',
+          boxShadow: glassType.id === 'ultra' 
+            ? '0 0 25px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(255,255,255,0.1)' 
+            : '0 0 20px rgba(16, 185, 129, 0.15), inset 0 0 10px rgba(255,255,255,0.05)',
+          // Background water gradient depending on Theme selection
+          background: theme.id === 'none' 
+            ? 'linear-gradient(to bottom, #0369a1, #0c4a6e)' 
+            : theme.id === 'iwagumi'
+            ? 'linear-gradient(to bottom, #115e59, #134e5e, #0c2c3e)'
+            : 'linear-gradient(to bottom, #14532d, #1e3a8a, #0c1c3e)',
+          zIndex: 2
+        }}>
+          {/* Glass Highlights Overlay */}
+          <div style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 80%, rgba(255,255,255,0.05) 100%)',
+            pointerEvents: 'none',
+            zIndex: 6
+          }} />
+
+          {/* Water Surface Line */}
+          <div style={{
+            position: 'absolute',
+            top: '8px', left: 0, right: 0,
+            height: '1px',
+            background: 'rgba(255,255,255,0.3)',
+            boxShadow: '0 1px 3px rgba(255,255,255,0.1)',
+            zIndex: 4
+          }} />
+
+          {/* Theme SVG Layouts */}
+          {theme.id === 'iwagumi' && (
+            <svg viewBox="0 0 400 200" width="100%" height="100%" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, zIndex: 3, pointerEvents: 'none' }}>
+              <path d="M 0 178 Q 120 165 240 182 T 400 172 L 400 200 L 0 200 Z" fill="#10b981" />
+              <path d="M 0 184 Q 160 172 320 188 T 400 182 L 400 200 L 0 200 Z" fill="#047857" opacity="0.85" />
+              <polygon points="110,185 140,95 175,115 185,185" fill="#4b5563" stroke="#374151" strokeWidth="0.5" />
+              <polygon points="110,185 140,95 155,185" fill="#6b7280" opacity="0.6" />
+              <polygon points="205,185 225,120 255,135 265,185" fill="#374151" stroke="#1f2937" strokeWidth="0.5" />
+              <polygon points="80,190 95,160 110,190" fill="#4b5563" />
+              <polygon points="275,190 290,165 305,190" fill="#4b5563" />
+            </svg>
+          )}
+
+          {theme.id === 'jungle' && (
+            <svg viewBox="0 0 400 200" width="100%" height="100%" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, zIndex: 3, pointerEvents: 'none' }}>
+              <path d="M 0 186 Q 200 175 400 188 L 400 200 L 0 200 Z" fill="#2d1a10" />
+              <polygon points="65,190 85,145 115,190" fill="#1f1610" stroke="#000000" strokeWidth="0.5" />
+              <polygon points="275,190 305,130 335,190" fill="#1f1610" stroke="#000000" strokeWidth="0.5" />
+              <path d="M 50 190 Q 100 140 140 70 Q 150 60 170 75 Q 130 110 100 190 Z" fill="#3c2212" />
+              <path d="M 110 115 Q 150 100 190 110 Q 200 115 180 125 Q 150 115 110 120 Z" fill="#3c2212" opacity="0.9" />
+              <path d="M 320 190 Q 260 120 220 80 Q 210 70 230 65 Q 270 105 310 190 Z" fill="#27150a" />
+              <circle cx="80" cy="155" r="14" fill="#047857" opacity="0.85" />
+              <circle cx="100" cy="165" r="16" fill="#065f46" opacity="0.75" />
+              <circle cx="70" cy="170" r="10" fill="#065f46" />
+              <circle cx="130" cy="90" r="10" fill="#059669" opacity="0.85" />
+              <circle cx="140" cy="85" r="12" fill="#047857" opacity="0.75" />
+              <circle cx="285" cy="145" r="15" fill="#047857" opacity="0.85" />
+              <circle cx="265" cy="160" r="13" fill="#065f46" opacity="0.75" />
+              <circle cx="300" cy="155" r="18" fill="#065f46" />
+            </svg>
+          )}
+
+          {/* Bubbles Generator */}
+          {equipment.id !== 'none' && bubbles.map((bubble) => (
+            <div
+              key={bubble.id}
+              className="bubble-particle"
+              style={{
+                left: bubble.left,
+                width: bubble.size,
+                height: bubble.size,
+                animation: `bubbleUp ${bubble.duration} infinite linear`,
+                animationDelay: bubble.delay
+              }}
+            />
+          ))}
+
+          {/* Equipment inside: Basic Internal corner filter */}
+          {equipment.id === 'basic' && (
+            <div style={{
+              position: 'absolute',
+              top: '12px',
+              right: '8px',
+              width: '18px',
+              height: '45px',
+              background: 'linear-gradient(to right, #1f2937, #111827)',
+              borderRadius: '2px',
+              borderLeft: '1px solid rgba(255,255,255,0.1)',
+              zIndex: 4,
+              boxShadow: '0 2px 5px rgba(0,0,0,0.5)'
+            }}>
+              {/* Filter grid lines */}
+              <div style={{ width: '100%', height: '3px', background: '#374151', margin: '6px 0 3px' }} />
+              <div style={{ width: '100%', height: '3px', background: '#374151', margin: '3px 0' }} />
+            </div>
+          )}
+
+          {/* Equipment inside: Planted canister intake/outflow pipe */}
+          {equipment.id === 'planted' && (
+            <>
+              {/* Outflow Pipe Left */}
+              <div style={{
+                position: 'absolute',
+                top: '10px',
+                left: '6px',
+                width: '6px',
+                height: '35px',
+                border: '2px solid rgba(255,255,255,0.15)',
+                borderBottom: 'none',
+                borderRadius: '4px 4px 0 0',
+                background: 'rgba(255,255,255,0.05)',
+                zIndex: 4
+              }} />
+              {/* Outflow nozzle */}
+              <div style={{
+                position: 'absolute',
+                top: '40px',
+                left: '6px',
+                width: '10px',
+                height: '6px',
+                background: 'rgba(255,255,255,0.2)',
+                borderRadius: '0 4px 4px 0',
+                zIndex: 4
+              }} />
+            </>
+          )}
+        </div>
+
+        {/* Cabinet Stand */}
+        <div style={{
+          width: `${displayWidth + 24}px`,
+          height: '22px',
+          background: 'linear-gradient(to bottom, #1e293b, #0f172a)',
+          borderTop: '2px solid rgba(255,255,255,0.1)',
+          borderRadius: '4px',
+          boxShadow: '0 5px 15px rgba(0,0,0,0.5)',
+          zIndex: 5,
+          marginTop: '-4px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative'
+        }}>
+          {/* Handle details */}
+          <div style={{ width: '30px', height: '3px', background: '#475569', borderRadius: '2px' }} />
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '40px' }}>
