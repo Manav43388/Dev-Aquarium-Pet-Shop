@@ -197,17 +197,22 @@ const AppContent = () => {
   // Details Modal State
   const [selectedDetailProduct, setSelectedDetailProduct] = useState(null);
 
+  const CATALOG_VERSION = 'v3_real_images_fixed';
+
   // Load from LocalStorage
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem('products');
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    const version = localStorage.getItem('catalog_version');
+    if (saved && version === CATALOG_VERSION) {
+      return JSON.parse(saved);
+    }
+    return INITIAL_PRODUCTS;
   });
-
-
 
   // Save to LocalStorage
   useEffect(() => {
     localStorage.setItem('products', JSON.stringify(products));
+    localStorage.setItem('catalog_version', CATALOG_VERSION);
   }, [products]);
 
   const filteredProducts = filter === 'All' 

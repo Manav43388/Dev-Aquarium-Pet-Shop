@@ -1,9 +1,8 @@
-
-import { X, Minus, Plus, Trash2, ShoppingBag, MessageCircle } from 'lucide-react';
+import { X, Trash2, ShoppingBag, MessageCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const CartDrawer = ({ isOpen, onClose }) => {
-  const { cart, removeFromCart, updateQuantity, totalPrice } = useCart();
+  const { cart, removeFromCart, totalPrice } = useCart();
 
   if (!isOpen) return null;
 
@@ -21,12 +20,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
       width: '100%',
       maxWidth: '450px',
       height: '100vh',
-      backgroundColor: 'white',
-      boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
+      backgroundColor: 'var(--surface)',
+      borderLeft: '1px solid var(--surface-border)',
+      boxShadow: '-10px 0 40px rgba(0,0,0,0.5)',
       zIndex: 2000,
       display: 'flex',
       flexDirection: 'column',
-      animation: 'slideLeft 0.3s ease'
+      animation: 'slideLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards'
     }}>
       <style>{`
         @keyframes slideLeft {
@@ -35,40 +35,56 @@ const CartDrawer = ({ isOpen, onClose }) => {
         }
       `}</style>
       
-      <div style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--glass-border)' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Your Cart</h2>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+      {/* Drawer Header */}
+      <div style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--surface-border)' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'white' }}>Your Cart</h2>
+        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <X size={24} />
         </button>
       </div>
 
+      {/* Cart Items List */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
         {cart.length === 0 ? (
-          <div style={{ textAlign: 'center', marginTop: '100px' }}>
-            <ShoppingBag size={64} style={{ opacity: 0.1, marginBottom: '24px' }} />
+          <div style={{ textAlign: 'center', marginTop: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <ShoppingBag size={64} style={{ opacity: 0.1, color: 'var(--primary)' }} />
             <p style={{ color: 'var(--text-muted)' }}>Your cart is empty</p>
-            <button className="btn btn-primary" style={{ marginTop: '24px' }} onClick={onClose}>Start Shopping</button>
+            <button className="btn btn-primary" style={{ marginTop: '12px' }} onClick={onClose}>Start Shopping</button>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {cart.map(item => (
-              <div key={item.id} style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                <img src={item.image} style={{ width: '80px', height: '80px', borderRadius: '12px', objectFit: 'cover' }} />
+              <div key={item.id} style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', padding: '16px', borderRadius: '16px' }}>
+                <img src={item.image} style={{ width: '70px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
                 <div style={{ flex: 1 }}>
-                  <h4 style={{ fontWeight: 700 }}>{item.name}</h4>
-                  <p style={{ color: 'var(--primary)', fontWeight: 800 }}>₹{item.price}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
-                    <button className="btn-outline" style={{ padding: '4px' }} onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                      <Minus size={14} />
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button className="btn-outline" style={{ padding: '4px' }} onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                      <Plus size={14} />
-                    </button>
+                  <h4 style={{ fontWeight: 700, color: 'white', fontSize: '0.95rem', lineHeight: '1.3', marginBottom: '4px' }}>{item.name}</h4>
+                  <p style={{ color: 'var(--primary)', fontWeight: 800, fontSize: '0.95rem' }}>₹{item.price}</p>
+                  
+                  {/* Simplifed quantity text display (No plus/minus) */}
+                  <div style={{ marginTop: '6px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    <span>Quantity: <strong style={{ color: 'white' }}>{item.quantity}</strong></span>
                   </div>
                 </div>
-                <button style={{ color: '#EF4444', background: 'none', border: 'none' }} onClick={() => removeFromCart(item.id)}>
-                  <Trash2 size={18} />
+                
+                {/* Remove button */}
+                <button 
+                  style={{ 
+                    color: 'var(--danger)', 
+                    background: 'rgba(239, 68, 68, 0.1)', 
+                    border: '1px solid rgba(239, 68, 68, 0.2)', 
+                    borderRadius: '8px', 
+                    width: '36px', 
+                    height: '36px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'var(--transition)'
+                  }} 
+                  onClick={() => removeFromCart(item.id)}
+                  title="Remove from Cart"
+                >
+                  <Trash2 size={16} />
                 </button>
               </div>
             ))}
@@ -76,18 +92,19 @@ const CartDrawer = ({ isOpen, onClose }) => {
         )}
       </div>
 
+      {/* Cart Footer */}
       {cart.length > 0 && (
-        <div style={{ padding: '24px', borderTop: '1px solid var(--glass-border)', background: 'var(--surface)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
-            <span style={{ fontSize: '1.1rem', fontWeight: 600 }}>Total Amount</span>
-            <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary)' }}>₹{totalPrice}</span>
+        <div style={{ padding: '24px', borderTop: '1px solid var(--surface-border)', background: 'rgba(15,23,42,0.95)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px', alignItems: 'center' }}>
+            <span style={{ fontSize: '1.05rem', fontWeight: 600, color: 'white' }}>Total Amount</span>
+            <span style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--primary)' }}>₹{totalPrice}</span>
           </div>
           <button 
             className="btn btn-primary" 
             style={{ width: '100%', padding: '16px', justifyContent: 'center' }}
             onClick={handleCheckout}
           >
-            <MessageCircle size={20} />
+            <MessageCircle size={18} />
             Order on WhatsApp
           </button>
         </div>
