@@ -1,8 +1,8 @@
-import { X, Trash2, ShoppingBag, MessageCircle } from 'lucide-react';
+import { X, Trash2, ShoppingBag, MessageCircle, Minus, Plus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const CartDrawer = ({ isOpen, onClose }) => {
-  const { cart, removeFromCart, totalPrice } = useCart();
+  const { cart, removeFromCart, updateQuantity, totalPrice } = useCart();
 
   if (!isOpen) return null;
 
@@ -33,6 +33,10 @@ const CartDrawer = ({ isOpen, onClose }) => {
           from { transform: translateX(100%); }
           to { transform: translateX(0); }
         }
+        .quantity-btn:hover {
+          background: rgba(255, 255, 255, 0.15) !important;
+          border-color: var(--primary) !important;
+        }
       `}</style>
       
       {/* Drawer Header */}
@@ -60,9 +64,51 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   <h4 style={{ fontWeight: 700, color: 'white', fontSize: '0.95rem', lineHeight: '1.3', marginBottom: '4px' }}>{item.name}</h4>
                   <p style={{ color: 'var(--primary)', fontWeight: 800, fontSize: '0.95rem' }}>₹{item.price}</p>
                   
-                  {/* Simplifed quantity text display (No plus/minus) */}
-                  <div style={{ marginTop: '6px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    <span>Quantity: <strong style={{ color: 'white' }}>{item.quantity}</strong></span>
+                  {/* Quantity controls with minus and plus buttons */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '8px' }}>
+                    <button 
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid var(--surface-border)',
+                        color: 'white',
+                        borderRadius: '6px',
+                        width: '28px',
+                        height: '28px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s, border-color 0.2s'
+                      }}
+                      className="quantity-btn"
+                      title="Decrease quantity"
+                    >
+                      <Minus size={12} />
+                    </button>
+                    <span style={{ color: 'white', fontWeight: 700, minWidth: '18px', textAlign: 'center', fontSize: '0.9rem' }}>
+                      {item.quantity}
+                    </span>
+                    <button 
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid var(--surface-border)',
+                        color: 'white',
+                        borderRadius: '6px',
+                        width: '28px',
+                        height: '28px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s, border-color 0.2s'
+                      }}
+                      className="quantity-btn"
+                      title="Increase quantity"
+                    >
+                      <Plus size={12} />
+                    </button>
                   </div>
                 </div>
                 

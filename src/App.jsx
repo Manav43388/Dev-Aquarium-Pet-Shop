@@ -21,6 +21,12 @@ import CustomTankBuilder from './components/CustomTankBuilder';
 import CompatibilityChecker from './components/CompatibilityChecker';
 import ProductDetailModal from './components/ProductDetailModal';
 
+// Assets
+import aquariumImg from './assets/products/aquarium.png';
+import bettaImg from './assets/products/betta.png';
+import birdsImg from './assets/products/birds.png';
+import foodImg from './assets/products/food.png';
+
 // Context
 import { CartProvider } from './context/CartContext';
 
@@ -32,7 +38,7 @@ const INITIAL_PRODUCTS = [
     category: 'Accessories', 
     rating: 5, 
     reviews: 42, 
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=800',
+    image: aquariumImg,
     description: 'Professional grade low-iron rimless glass tank with diamond polished bevelled edges, offering stunning distortion-free views for high-end aquascaping.',
     stockStatus: 'in',
     specs: {
@@ -49,7 +55,7 @@ const INITIAL_PRODUCTS = [
     category: 'Fish Food', 
     rating: 4, 
     reviews: 128, 
-    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=800',
+    image: foodImg,
     description: 'Premium slow-sinking nutrient pellets enriched with natural color-enhancers (Spirulina & Astaxanthin), highly digestible and leaves water clean.',
     stockStatus: 'in',
     specs: {
@@ -66,7 +72,7 @@ const INITIAL_PRODUCTS = [
     category: 'Fish', 
     rating: 5, 
     reviews: 210, 
-    image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=800',
+    image: bettaImg,
     description: 'Spectacular show-grade male Halfmoon Betta showcasing a full 180-degree caudal spread. Highly active, healthy, and quarantined.',
     stockStatus: 'in',
     specs: {
@@ -84,7 +90,7 @@ const INITIAL_PRODUCTS = [
     category: 'Birds', 
     rating: 5, 
     reviews: 34, 
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800',
+    image: birdsImg,
     description: 'Healthy, active bonded pair of Peach-faced Lovebirds. Beautiful vibrant coloration, social, well-vocalized, and hand-tame.',
     stockStatus: 'in',
     specs: {
@@ -101,7 +107,7 @@ const INITIAL_PRODUCTS = [
     category: 'Accessories', 
     rating: 5, 
     reviews: 56, 
-    image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&q=80&w=800',
+    image: aquariumImg,
     description: 'Slim profile anodized aluminum LED light fixture with extendable brackets. Features programmable spectrum, 24/7 sunrise-sunset cycle, and custom timer.',
     stockStatus: 'in',
     specs: {
@@ -118,7 +124,7 @@ const INITIAL_PRODUCTS = [
     category: 'Accessories', 
     rating: 4, 
     reviews: 89, 
-    image: 'https://images.unsplash.com/photo-1524704654690-b56c05c78a02?auto=format&fit=crop&q=80&w=800',
+    image: aquariumImg,
     description: 'Heavy duty external canister filter with 3-stage mechanical, biological, and chemical filtration. Silent motor, high flow rate, and easy prime valve.',
     stockStatus: 'in',
     specs: {
@@ -135,7 +141,7 @@ const INITIAL_PRODUCTS = [
     category: 'Birds', 
     rating: 4, 
     reviews: 76, 
-    image: 'https://images.unsplash.com/photo-1552728089-57bdde30ebd3?auto=format&fit=crop&q=80&w=800',
+    image: birdsImg,
     description: 'Playful, hand-raised budget budgerigars. Very friendly temperament, highly vocal, and easy to train. Standard yellow/blue pastel combinations.',
     stockStatus: 'in',
     specs: {
@@ -152,7 +158,7 @@ const INITIAL_PRODUCTS = [
     category: 'Pet Supplies', 
     rating: 5, 
     reviews: 145, 
-    image: 'https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?auto=format&fit=crop&q=80&w=800',
+    image: foodImg,
     description: 'Triple-cleaned seed mixture formulated for small psittacines. Packed with yellow millet, red millet, canary seed, and oat groats to keep birds vibrant.',
     stockStatus: 'in',
     specs: {
@@ -197,7 +203,7 @@ const AppContent = () => {
   // Details Modal State
   const [selectedDetailProduct, setSelectedDetailProduct] = useState(null);
 
-  const CATALOG_VERSION = 'v3_real_images_fixed';
+  const CATALOG_VERSION = 'v4_local_assets_fixed';
 
   // Load from LocalStorage
   const [products, setProducts] = useState(() => {

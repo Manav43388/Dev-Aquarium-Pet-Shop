@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { Plus, Trash2, Edit, Save, X, Search, ShieldCheck, PieChart, List, Check } from 'lucide-react';
 
+// Assets
+import aquariumImg from '../assets/products/aquarium.png';
+import bettaImg from '../assets/products/betta.png';
+import birdsImg from '../assets/products/birds.png';
+import foodImg from '../assets/products/food.png';
+
 const PRESET_IMAGES = [
-  { name: 'Aquarium Tank', url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Betta Fish', url: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Goldfish', url: 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Lovebirds / Parrots', url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Fish Food / Seeds', url: 'https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Filter / Accessories', url: 'https://images.unsplash.com/photo-1520338258525-606b90f96b0c?auto=format&fit=crop&q=80&w=800' }
+  { name: 'Aquarium Tank', url: aquariumImg },
+  { name: 'Betta Fish', url: bettaImg },
+  { name: 'Goldfish', url: bettaImg },
+  { name: 'Lovebirds / Parrots', url: birdsImg },
+  { name: 'Fish Food / Seeds', url: foodImg },
+  { name: 'Filter / Accessories', url: aquariumImg }
 ];
 
 const AdminPanel = ({ products, onAdd, onDelete, onUpdate }) => {
